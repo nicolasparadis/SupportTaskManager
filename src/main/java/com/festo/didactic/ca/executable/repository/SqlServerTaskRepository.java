@@ -7,13 +7,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class SqlServerTaskRepository implements CrudRepository<Task> {
+public class SqlServerTaskRepository implements TaskRepository {
     private final Connection connection;
 
     public SqlServerTaskRepository(Connection connection) {
         this.connection = connection;
     }
 
+    @Override
     public List<Task> findAll() {
         return Arrays.asList(
             new Task(1, "Test", new Date()),

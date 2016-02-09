@@ -3,9 +3,9 @@ package com.festo.didactic.ca.executable;
 import com.festo.didactic.ca.executable.comparator.Difference;
 import com.festo.didactic.ca.executable.comparator.ListComparator;
 import com.festo.didactic.ca.executable.comparator.SimpleListComparator;
-import com.festo.didactic.ca.executable.repository.CrudRepository;
 import com.festo.didactic.ca.executable.repository.ExcelTaskRepository;
 import com.festo.didactic.ca.executable.repository.SqlServerTaskRepository;
+import com.festo.didactic.ca.executable.repository.TaskRepository;
 import com.festo.didactic.ca.executable.task.Task;
 
 import java.io.File;
@@ -17,11 +17,11 @@ public class SupportTaskManager {
     public void run(File configurationFile) {
 
         try (Connection connection = null) {
-            CrudRepository<Task> crudRepository1 = new ExcelTaskRepository(new File("")); // FIXME
-            CrudRepository<Task> crudRepository2 = new SqlServerTaskRepository(connection);
+            TaskRepository taskRepository1 = new ExcelTaskRepository(new File("")); // FIXME
+            TaskRepository taskRepository2 = new SqlServerTaskRepository(connection);
 
             ListComparator<Task> listComparator = new SimpleListComparator<>();
-            List<Difference<Task>> differences = listComparator.compare(crudRepository1.findAll(), crudRepository2.findAll());
+            List<Difference<Task>> differences = listComparator.compare(taskRepository1.findAll(), taskRepository2.findAll());
 
             for (Difference<Task> difference : differences) {
                 System.out.println(difference);

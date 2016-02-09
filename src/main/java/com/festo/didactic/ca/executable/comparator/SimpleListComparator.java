@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleListComparator<T> implements ListComparator<T> {
+    @Override
     public List<Difference<T>> compare(List<T> entities1, final List<T> entities2) {
         List<Difference<T>> differences = new ArrayList<>();
 
