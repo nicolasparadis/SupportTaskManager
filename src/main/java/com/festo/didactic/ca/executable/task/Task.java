@@ -1,16 +1,12 @@
 package com.festo.didactic.ca.executable.task;
 
-import java.util.Date;
-
 public class Task {
     private final long id;
     private final String name;
-    private final Date inputDate;
 
-    public Task(long id, String name, Date inputDate) {
+    public Task(long id, String name) {
         this.id = id;
         this.name = name;
-        this.inputDate = inputDate;
     }
 
     @Override
