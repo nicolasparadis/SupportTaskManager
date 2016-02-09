@@ -8,18 +8,42 @@ import com.festo.didactic.ca.executable.repository.ExcelTaskRepository;
 import com.festo.didactic.ca.executable.repository.SqlServerTaskRepository;
 import com.festo.didactic.ca.executable.task.Task;
 
+import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class SupportTaskManager {
-    public static void main(String[] args) {
-        CrudRepository<Task> crudRepository1 = new ExcelTaskRepository();
-        CrudRepository<Task> crudRepository2 = new SqlServerTaskRepository();
+    public void run(File configurationFile) {
 
-        ListComparator<Task> listComparator = new SimpleListComparator<>();
-        List<Difference<Task>> differences = listComparator.compare(crudRepository1.findAll(), crudRepository2.findAll());
+        try (Connection connection = null) {
+            CrudRepository<Task> crudRepository1 = new ExcelTaskRepository(new File("")); // FIXME
+            CrudRepository<Task> crudRepository2 = new SqlServerTaskRepository(connection);
 
-        for (Difference<Task> difference : differences) {
-            System.out.println(difference);
+            ListComparator<Task> listComparator = new SimpleListComparator<>();
+            List<Difference<Task>> differences = listComparator.compare(crudRepository1.findAll(), crudRepository2.findAll());
+
+            for (Difference<Task> difference : differences) {
+                System.out.println(difference);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("configuration file missing");
+            return;
+        }
+
+        File configurationFile = new File(args[0]);
+
+        if (!configurationFile.exists() || !configurationFile.isFile()) {
+            System.out.println("configuration file not existent");
+            return;
+        }
+
+        new SupportTaskManager().run(configurationFile);
     }
 }
